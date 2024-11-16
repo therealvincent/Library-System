@@ -15,6 +15,8 @@ public class LogInGUI extends JFrame {
     private float animationProgress = 0; // Tracks animation progress (0 to 1)
     private Timer animationTimer;
 
+
+    // JGVGV
     public LogInGUI() {
         setTitle("Login"); // Sets the title to "Login"
         setSize(1024, 800); // Sets the resolution to 1024x800
