@@ -2,13 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainGUI extends JFrame {
-    private boolean isDarkMode = false; // Boolean value for using
+    private boolean isDarkMode = false;
     private JPanel backgroundPanel;
     private JPanel mainPanel;
     private JPanel bottomPanel;
     private JLabel titleLabel;
     private JButton logOutButton;
     private JPanel manageUserPage;
+    private JPanel manageBookPage;
 
     public MainGUI() {
         setTitle("Library Management System");
@@ -30,6 +31,10 @@ public class MainGUI extends JFrame {
         // Initialize ManageUserPage and add to backgroundPanel
         setupManageUserPage();
         backgroundPanel.add(manageUserPage, "ManageUserPage");
+
+        // Initialize ManageBookPage and add to backgroundPanel
+        setupManageBookPage();
+        backgroundPanel.add(manageBookPage, "ManageBookPage");
 
         // Initialize with light mode
         applyLightMode();
@@ -54,6 +59,7 @@ public class MainGUI extends JFrame {
 
         gbc.gridy++;
         JButton manageBooksButton = createStyledButton("Manage Books");
+        manageBooksButton.addActionListener(e -> switchToManageBookPage());
         mainPanel.add(manageBooksButton, gbc);
 
         gbc.gridy++;
@@ -89,38 +95,11 @@ public class MainGUI extends JFrame {
     }
 
     private void setupManageUserPage() {
-        manageUserPage = new JPanel(new BorderLayout());
+        manageUserPage = new ManageUserPanel(this); // Assuming ManageBookPanel exists
+    }
 
-        JPanel buttonPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 0, 10, 0);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-
-        // Add Book Button
-        JButton addBookButton = createStyledButton("Add User");
-        buttonPanel.add(addBookButton, gbc);
-
-        gbc.gridy++;
-        // Remove Book Button
-        JButton removeBookButton = createStyledButton("Remove User");
-        buttonPanel.add(removeBookButton, gbc);
-
-        gbc.gridy++;
-        // Update Book Button
-        JButton updateBookButton = createStyledButton("Update User");
-        buttonPanel.add(updateBookButton, gbc);
-
-        manageUserPage.add(buttonPanel, BorderLayout.CENTER);
-
-        // Return to Home Button
-        JButton returnButton = new JButton("Return to Home");
-        returnButton.setPreferredSize(new Dimension(150, 40));
-        returnButton.addActionListener(e -> switchToMainPage());
-
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        bottomPanel.add(returnButton);
-        manageUserPage.add(bottomPanel, BorderLayout.SOUTH);
+    private void setupManageBookPage() {
+        manageBookPage = new ManageBookPanel(this); // Assuming ManageBookPanel exists
     }
 
     private JButton createStyledButton(String text) {
@@ -166,6 +145,11 @@ public class MainGUI extends JFrame {
     private void switchToManageUserPage() {
         CardLayout cl = (CardLayout) backgroundPanel.getLayout();
         cl.show(backgroundPanel, "ManageUserPage");
+    }
+
+    private void switchToManageBookPage() {
+        CardLayout cl = (CardLayout) backgroundPanel.getLayout();
+        cl.show(backgroundPanel, "ManageBookPage");
     }
 
     public static void main(String[] args) {
