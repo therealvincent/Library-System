@@ -9,6 +9,7 @@ public class MainGUI extends JFrame {
     private JLabel titleLabel;
     private JButton logOutButton;
     private JPanel manageUserPage;
+    private JPanel viewUserProfilePage;
 
     public MainGUI() {
         setTitle("Library Management System");
@@ -30,6 +31,11 @@ public class MainGUI extends JFrame {
         // Initialize ManageUserPage and add to backgroundPanel
         setupManageUserPage();
         backgroundPanel.add(manageUserPage, "ManageUserPage");
+
+        // Initialize ViewUserProfilePage and add to backgroundPanel
+        setUpViewUserProfilePage();
+        backgroundPanel.add(viewUserProfilePage, "ViewUserProfilePage");
+
 
         // Initialize with light mode
         applyLightMode();
@@ -58,11 +64,12 @@ public class MainGUI extends JFrame {
 
         gbc.gridy++;
         JButton viewProfileButton = createStyledButton("View User Profile");
+        viewProfileButton.addActionListener(e -> switchToViewUserProfilePage());
         mainPanel.add(viewProfileButton, gbc);
 
         gbc.gridy++;
-        JButton viewLogsButton = createStyledButton("View Activity Logs");
-        mainPanel.add(viewLogsButton, gbc);
+        JButton checkBookButton = createStyledButton("Check Book Availability");
+        mainPanel.add(checkBookButton, gbc);
 
         // Add Dark Mode Toggle Icon
         JButton darkModeButton = new JButton("🌙");
@@ -123,6 +130,50 @@ public class MainGUI extends JFrame {
         manageUserPage.add(bottomPanel, BorderLayout.SOUTH);
     }
 
+    private void setUpViewUserProfilePage() {
+        viewUserProfilePage = new JPanel(new BorderLayout());
+
+        // Creates the title "Library Members" and places it at the top left of the panel.
+        JLabel titleLabel = new JLabel("Library Members", SwingConstants.LEFT);
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        viewUserProfilePage.add(titleLabel, BorderLayout.NORTH);
+
+        // Creates the search panel with icon and text field used for searching up members.
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel searchIcon = new JLabel(new ImageIcon("book_icon.png"));
+        JTextField searchField = new JTextField("Search", 20);
+        searchPanel.add(searchIcon);
+        searchPanel.add(searchField);
+        viewUserProfilePage.add(searchPanel, BorderLayout.CENTER);
+
+        // Members list panel
+        JPanel membersPanel = new JPanel(new GridLayout(4, 1, 0, 10));
+        membersPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
+
+        // This for loop creates the stacks of member row.
+        for (int i = 0; i < 4; i++) {
+            JPanel memberRow = new JPanel(new BorderLayout());
+            JLabel memberLabel = new JLabel("Name of Member", new ImageIcon("user_icon.png"), SwingConstants.LEFT);
+            JButton moreInfoButton = createStyledButton("More Info");
+            moreInfoButton.setPreferredSize(new Dimension(100, 30));
+            memberRow.add(memberLabel, BorderLayout.CENTER);
+            memberRow.add(moreInfoButton, BorderLayout.EAST);
+            memberRow.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            membersPanel.add(memberRow);
+        }
+
+        viewUserProfilePage.add(membersPanel, BorderLayout.SOUTH);
+
+        // Creates the back button
+        JButton backButton = new JButton("Back");
+        backButton.setPreferredSize(new Dimension(100, 30));
+        backButton.addActionListener(e -> switchToMainPage());
+        JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        backButtonPanel.add(backButton);
+        viewUserProfilePage.add(backButtonPanel, BorderLayout.SOUTH);
+    }
+
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setPreferredSize(new Dimension(300, 40));
@@ -166,6 +217,11 @@ public class MainGUI extends JFrame {
     private void switchToManageUserPage() {
         CardLayout cl = (CardLayout) backgroundPanel.getLayout();
         cl.show(backgroundPanel, "ManageUserPage");
+    }
+
+    private void switchToViewUserProfilePage() {
+        CardLayout cl = (CardLayout) backgroundPanel.getLayout();
+        cl.show(backgroundPanel, "ViewUserProfilePage");
     }
 
     public static void main(String[] args) {
